@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,26 +21,36 @@ namespace Trivia
             aGame.add("Pat");
             aGame.add("Sue");
 
-            Random rand = new Random();
+	        int seed = 5678;
 
-            do
-            {
+	        for (int i = 0; i < 100; i++)
+	        {
+		        try
+		        {
+			        Random rand = new Random(seed + i*313);
 
-                aGame.roll(rand.Next(5) + 1);
+			        do
+			        {
 
-                if (rand.Next(9) == 7)
-                {
-                    notAWinner = aGame.wrongAnswer();
-                }
-                else
-                {
-                    notAWinner = aGame.wasCorrectlyAnswered();
-                }
+				        aGame.roll(rand.Next(5) + 1);
 
+				        if (rand.Next(9) == 7)
+				        {
+					        notAWinner = aGame.wrongAnswer();
+				        }
+				        else
+				        {
+					        notAWinner = aGame.wasCorrectlyAnswered();
+				        }
 
-
-            } while (notAWinner);
-
+			        } while (notAWinner);
+		        }
+		        catch (Exception ex)
+		        {
+			        Console.WriteLine(ex);
+		        }
+	        }
+			Console.ReadLine();
         }
 
 
