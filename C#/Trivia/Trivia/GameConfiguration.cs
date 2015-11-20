@@ -8,23 +8,14 @@ namespace Trivia
 {
 	public class GameConfiguration
 	{
-		public Game StartSilentGameWithOnePlayer()
+		public Game StartGame(Action<string> eventDelegate, params string[] players)
 		{
-			Game game = new SilentGame();
-			game.add("Playa'");
+			Game game = new Game(eventDelegate);
+			foreach (var player in players)
+			{
+				game.add(player);
+			}
 			return game;
-		}
-
-		class SilentGame : Game
-		{
-			public SilentGame()
-				: base()
-			{
-			}
-
-			protected override void PrintMessage(string message)
-			{
-			}
 		}
 	}
 }

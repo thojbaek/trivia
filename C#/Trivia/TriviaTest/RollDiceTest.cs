@@ -11,7 +11,7 @@ namespace TriviaTest
 		[TestMethod]
 		public void Four()
 		{
-			Game undertest = new GameConfiguration().StartSilentGameWithOnePlayer();
+			Game undertest = new GameConfiguration().StartGame(delegate { }, "ad");
 			undertest.roll(4);
 		}
 	}

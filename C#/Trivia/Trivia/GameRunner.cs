@@ -1,10 +1,5 @@
 ﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-
 using UglyTrivia;
 
 namespace Trivia
@@ -12,10 +7,10 @@ namespace Trivia
     public class GameRunner
     {
 
-        private static bool notAWinner;
-		static FileStream ostrm;
-		static StreamWriter writer;
-	    private const int CHANGE_ITERATION = 1;
+        private static bool _notAWinner;
+		static FileStream _ostrm;
+		static StreamWriter _writer;
+	    private const int CHANGE_ITERATION = 5;
 
 	    public static void Main(String[] args)
 	    {
@@ -26,7 +21,7 @@ namespace Trivia
 				int mySeed = seed + i * 313;
 				CreateFile(i, mySeed);
 
-			    Game aGame = new Game();
+			    Game aGame = new Game(Console.WriteLine);
 
 			    aGame.add("Chet");
 			    aGame.add("Pat");
@@ -41,13 +36,13 @@ namespace Trivia
 
 					    if (rand.Next(9) == 7)
 					    {
-						    notAWinner = aGame.wrongAnswer();
+						    _notAWinner = aGame.wrongAnswer();
 					    }
 					    else
 					    {
-						    notAWinner = aGame.wasCorrectlyAnswered();
+						    _notAWinner = aGame.wasCorrectlyAnswered();
 					    }
-				    } while (notAWinner);
+				    } while (_notAWinner);
 			    }
 			    catch (Exception ex)
 			    {
@@ -60,8 +55,8 @@ namespace Trivia
 
 	    static void CloseStream()
 	    {
-			writer.Close();
-			ostrm.Close();
+			_writer.Close();
+			_ostrm.Close();
 	    }
 
 	    static void CreateFile(int index, int seed)
@@ -70,8 +65,8 @@ namespace Trivia
 			{
 				var path = "../../Change"+ CHANGE_ITERATION;
 				Directory.CreateDirectory(path);
-				ostrm = new FileStream(string.Format("{2}/Game{0}_{1}.txt", index, seed, path), FileMode.OpenOrCreate, FileAccess.Write);
-				writer = new StreamWriter(ostrm);
+				_ostrm = new FileStream(string.Format("{2}/Game{0}_{1}.txt", index, seed, path), FileMode.OpenOrCreate, FileAccess.Write);
+				_writer = new StreamWriter(_ostrm);
 			}
 			catch (Exception e)
 			{
@@ -79,7 +74,7 @@ namespace Trivia
 				Console.WriteLine(e.Message);
 				return;
 			}
-			Console.SetOut(writer);
+			Console.SetOut(_writer);
 	    }
     }
 

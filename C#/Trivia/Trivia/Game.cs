@@ -24,9 +24,14 @@ namespace UglyTrivia
         int currentPlayer = 0;
         bool isGettingOutOfPenaltyBox;
 
-        public Game()
+
+	    private readonly Action<string> _eventAction;
+
+        public Game(Action<string> eventAction)
         {
-            for (int i = 0; i < 50; i++)
+	        _eventAction = eventAction;
+
+	        for (int i = 0; i < 50; i++)
             {
                 popQuestions.AddLast("Pop Question " + i);
                 scienceQuestions.AddLast(("Science Question " + i));
@@ -34,11 +39,6 @@ namespace UglyTrivia
                 rockQuestions.AddLast(createRockQuestion(i));
             }
         }
-
-	    protected virtual void PrintMessage(string message)
-	    {
-		    Console.WriteLine(message);
-	    }
 
         public String createRockQuestion(int index)
         {
@@ -59,8 +59,8 @@ namespace UglyTrivia
             purses[howManyPlayers()] = 0;
             inPenaltyBox[howManyPlayers()] = false;
 
-            PrintMessage(playerName + " was added");
-            PrintMessage("They are player number " + players.Count);
+            _eventAction(playerName + " was added");
+            _eventAction("They are player number " + players.Count);
             return true;
         }
 
@@ -71,8 +71,8 @@ namespace UglyTrivia
 
         public void roll(int roll)
         {
-            PrintMessage(players[currentPlayer] + " is the current player");
-            PrintMessage("They have rolled a " + roll);
+            _eventAction(players[currentPlayer] + " is the current player");
+            _eventAction("They have rolled a " + roll);
 
             if (inPenaltyBox[currentPlayer])
             {
@@ -80,19 +80,19 @@ namespace UglyTrivia
                 {
                     isGettingOutOfPenaltyBox = true;
 
-                    PrintMessage(players[currentPlayer] + " is getting out of the penalty box");
+                    _eventAction(players[currentPlayer] + " is getting out of the penalty box");
                     places[currentPlayer] = places[currentPlayer] + roll;
                     if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
 
-                    PrintMessage(players[currentPlayer]
+                    _eventAction(players[currentPlayer]
                             + "'s new location is "
                             + places[currentPlayer]);
-                    PrintMessage("The category is " + currentCategory());
+                    _eventAction("The category is " + currentCategory());
                     askQuestion();
                 }
                 else
                 {
-                    PrintMessage(players[currentPlayer] + " is not getting out of the penalty box");
+                    _eventAction(players[currentPlayer] + " is not getting out of the penalty box");
                     isGettingOutOfPenaltyBox = false;
                 }
 
@@ -103,10 +103,10 @@ namespace UglyTrivia
                 places[currentPlayer] = places[currentPlayer] + roll;
                 if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
 
-                PrintMessage(players[currentPlayer]
+                _eventAction(players[currentPlayer]
                         + "'s new location is "
                         + places[currentPlayer]);
-                PrintMessage("The category is " + currentCategory());
+                _eventAction("The category is " + currentCategory());
                 askQuestion();
             }
 
@@ -116,22 +116,22 @@ namespace UglyTrivia
         {
             if (currentCategory() == "Pop")
             {
-                PrintMessage(popQuestions.First());
+                _eventAction(popQuestions.First());
                 popQuestions.RemoveFirst();
             }
             if (currentCategory() == "Science")
             {
-                PrintMessage(scienceQuestions.First());
+                _eventAction(scienceQuestions.First());
                 scienceQuestions.RemoveFirst();
             }
             if (currentCategory() == "Sports")
             {
-                PrintMessage(sportsQuestions.First());
+                _eventAction(sportsQuestions.First());
                 sportsQuestions.RemoveFirst();
             }
             if (currentCategory() == "Rock")
             {
-                PrintMessage(rockQuestions.First());
+                _eventAction(rockQuestions.First());
                 rockQuestions.RemoveFirst();
             }
         }
@@ -157,9 +157,9 @@ namespace UglyTrivia
             {
                 if (isGettingOutOfPenaltyBox)
                 {
-                    PrintMessage("Answer was correct!!!!");
+                    _eventAction("Answer was correct!!!!");
                     purses[currentPlayer]++;
-                    PrintMessage(players[currentPlayer]
+                    _eventAction(players[currentPlayer]
                             + " now has "
                             + purses[currentPlayer]
                             + " Gold Coins.");
@@ -183,9 +183,9 @@ namespace UglyTrivia
             else
             {
 
-                PrintMessage("Answer was corrent!!!!");
+                _eventAction("Answer was corrent!!!!");
                 purses[currentPlayer]++;
-                PrintMessage(players[currentPlayer]
+                _eventAction(players[currentPlayer]
                         + " now has "
                         + purses[currentPlayer]
                         + " Gold Coins.");
@@ -200,8 +200,8 @@ namespace UglyTrivia
 
         public bool wrongAnswer()
         {
-            PrintMessage("Question was incorrectly answered");
-            PrintMessage(players[currentPlayer] + " was sent to the penalty box");
+            _eventAction("Question was incorrectly answered");
+            _eventAction(players[currentPlayer] + " was sent to the penalty box");
             inPenaltyBox[currentPlayer] = true;
 
             currentPlayer++;
