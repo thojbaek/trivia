@@ -15,6 +15,7 @@ namespace Trivia
         private static bool notAWinner;
 		static FileStream ostrm;
 		static StreamWriter writer;
+	    private const int CHANGE_ITERATION = 1;
 
 	    public static void Main(String[] args)
 	    {
@@ -67,16 +68,18 @@ namespace Trivia
 	    {
 			try
 			{
-				ostrm = new FileStream(string.Format("../../GoldenMaster/Game{0}_{1}.txt", index, seed), FileMode.OpenOrCreate, FileAccess.Write);
+				var path = "../../Change"+ CHANGE_ITERATION;
+				Directory.CreateDirectory(path);
+				ostrm = new FileStream(string.Format("{2}/Game{0}_{1}.txt", index, seed, path), FileMode.OpenOrCreate, FileAccess.Write);
 				writer = new StreamWriter(ostrm);
-				Console.SetOut(writer);
-
 			}
 			catch (Exception e)
 			{
 				Console.WriteLine("Cannot open Redirect.txt for writing");
 				Console.WriteLine(e.Message);
+				return;
 			}
+			Console.SetOut(writer);
 	    }
     }
 
