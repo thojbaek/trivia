@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Trivia.GameObjects;
 
 namespace UglyTrivia
 {
@@ -28,6 +29,9 @@ namespace UglyTrivia
         {
             for (int i = 0; i < 50; i++)
             {
+	            popQuestions.AddLast(CreateQuestion(i, QUESTION_CATEGORY.POP));
+	            scienceQuestions.AddLast(CreateQuestion(i, QUESTION_CATEGORY.SCIENCE));
+	            sportsQuestions.AddLast(CreateQuestion(i, QUESTION_CATEGORY.SPORTS));
                 popQuestions.AddLast("Pop Question " + i);
                 scienceQuestions.AddLast(("Science Question " + i));
                 sportsQuestions.AddLast(("Sports Question " + i));
@@ -35,10 +39,20 @@ namespace UglyTrivia
             }
         }
 
-        public String createRockQuestion(int index)
-        {
-            return "Rock Question " + index;
-        }
+	    public String CreateQuestion(int index, QUESTION_CATEGORY category) 
+	    {
+		    switch (category)
+		    {
+			    case QUESTION_CATEGORY.POP:
+				    return "Pop Question " + index;
+				case QUESTION_CATEGORY.SCIENCE:
+				    return "Science Question " + index;
+				case QUESTION_CATEGORY.SPORTS:
+				    return "Sports Question " + index;
+				case QUESTION_CATEGORY.ROCK:
+				    return "Rock Question " + index;
+		    }
+	    }
 
         public bool isPlayable()
         {
