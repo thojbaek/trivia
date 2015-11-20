@@ -3,3 +3,4 @@
 *.csproj.user
 /Trivia/Trivia/GoldenMaster/
 /Trivia/Trivia/Change*
+/Trivia/TriviaTest/obj/*
